@@ -2,6 +2,7 @@ from PIL import Image, ImageDraw, ImageFont
 import random
 import json
 import re
+import os
 
 # Define colors for courses
 COLORS = [
@@ -126,10 +127,23 @@ def draw_text_with_max_width(draw, text, position, font, max_width, fill):
         y += draw.textbbox((0, 0), line, font=font)[3]
 def generator(json_data):
     print("json_data:", json_data)
-    image_path = 'tbk.png'
+    
+    # Get absolute path to assets directory
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    assets_dir = os.path.join(current_dir, 'assets')
+    
+    image_path = os.path.join(assets_dir, 'tbk.png')
+    font_path = os.path.join(assets_dir, 'SVN-Segoe UI.ttf')
+    
+    # Check if files exist
+    if not os.path.exists(image_path):
+        raise FileNotFoundError(f"Image file not found: {image_path}")
+    if not os.path.exists(font_path):
+        raise FileNotFoundError(f"Font file not found: {font_path}")
+    
     image = Image.open(image_path)
     draw = ImageDraw.Draw(image)
-    font = ImageFont.truetype("SVN-Segoe UI.ttf", 40, encoding="utf-8")
+    font = ImageFont.truetype(font_path, 40, encoding="utf-8")
     max_width = 340  # Set your max width here
     position = (513, 385)
     

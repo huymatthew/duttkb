@@ -35,29 +35,18 @@ def tkb_download(request):
         else:
             json_data = data
         
-        # Change working directory to assets folder for generator
-        current_dir = os.getcwd()
-        assets_dir = os.path.join(os.path.dirname(__file__), 'assets')
+        # Generate image using generator function
+        image = generator(json_data)
         
-        try:
-            os.chdir(assets_dir)
-            
-            # Generate image using generator function
-            image = generator(json_data)
-            
-            # Convert image to bytes
-            img_buffer = io.BytesIO()
-            image.save(img_buffer, format='PNG')
-            img_buffer.seek(0)
-            
-            # Return image as HTTP response
-            response = HttpResponse(img_buffer.getvalue(), content_type='image/png')
-            response['Content-Disposition'] = 'attachment; filename="tkb_schedule.png"'
-            return response
-            
-        finally:
-            # Always restore original directory
-            os.chdir(current_dir)
+        # Convert image to bytes
+        img_buffer = io.BytesIO()
+        image.save(img_buffer, format='PNG')
+        img_buffer.seek(0)
+        
+        # Return image as HTTP response
+        response = HttpResponse(img_buffer.getvalue(), content_type='image/png')
+        response['Content-Disposition'] = 'attachment; filename="tkb_schedule.png"'
+        return response
             
     except Exception as e:
         return Response({
