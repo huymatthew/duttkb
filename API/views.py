@@ -1,24 +1,34 @@
 from django.shortcuts import render
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from django.http import HttpResponse, Http404
-from django.conf import settings
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 from .generator import generator
 import json
 import io
 import os
 
-@api_view(['GET', 'POST'])
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
 def tkb_download(request):
     try:
         # Get data from request
         if request.method == 'GET':
             data = request.GET.get('data', None)
         else:  # POST
-            data = request.data.get('data', None)
+            if request.content_type == 'application/json':
+                try:
+                    body = json.loads(request.body.decode('utf-8'))
+                    data = body.get('data', None)
+                except json.JSONDecodeError:
+                    return JsonResponse({
+                        'status': 'error',
+                        'message': 'Invalid JSON in request body'
+                    }, status=400)
+            else:
+                data = request.POST.get('data', None)
         
         if not data:
-            return Response({
+            return JsonResponse({
                 'status': 'error',
                 'message': 'No data provided'
             }, status=400)
@@ -28,7 +38,7 @@ def tkb_download(request):
             try:
                 json_data = json.loads(data)
             except json.JSONDecodeError:
-                return Response({
+                return JsonResponse({
                     'status': 'error',
                     'message': 'Invalid JSON data'
                 }, status=400)
@@ -49,7 +59,7 @@ def tkb_download(request):
         return response
             
     except Exception as e:
-        return Response({
+        return JsonResponse({
             'status': 'error',
             'message': f'Error generating image: {str(e)}'
         }, status=500)
