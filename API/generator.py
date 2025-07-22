@@ -156,7 +156,10 @@ def generator(json_data):
         data = parse_json_data(json_data)
     else:
         data = json_data
-    _color = random.shuffle(COLORS)
+    
+    # Create shuffled color list
+    _color = COLORS.copy()
+    random.shuffle(_color)
 
     def add_course(course, color):
         text = course['course_name'] + '\n - ' + str(course['schedule'][3])
@@ -168,9 +171,11 @@ def generator(json_data):
         draw.rectangle([rect_x0, rect_y0, rect_x1, rect_y1], outline="black", fill=color, width=4)
         draw_text_with_max_width(draw, text, cpos, font, max_width, fill=(0, 0, 0))
     
-
+    color_index = 0
     for course in data.values():
-        add_course(course, _color.pop())
+        color = _color[color_index % len(_color)]
+        add_course(course, color)
+        color_index += 1
     return image
 
 if __name__ == '__main__':
