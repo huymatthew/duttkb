@@ -6,10 +6,10 @@ import os
 
 # Define colors for courses
 COLORS = [
-    "#FFEBEE", "#E3F2FD", "#E8F5E9", "#FFFDE7", "#F3E5F5",
-    "#FFF3E0", "#E0F7FA", "#F1F8E9", "#FBE9E7", "#F5F5F5",
-    "#FFF9C4", "#E0F2F1", "#F8BBD0", "#FFECB3", "#C8E6C9",
-    "#BBDEFB", "#FFE0B2", "#D1C4E9", "#B2EBF2", "#FFCDD2"
+    "#EF9A9A", "#64B5F6", "#81C784", "#FFF176", "#BA68C8",
+    "#FFB74D", "#4DD0E1", "#AED581", "#FFAB91", "#BDBDBD",
+    "#FFF59D", "#4DB6AC", "#F06292", "#FFD54F", "#388E3C",
+    "#1976D2", "#FFA726", "#7E57C2", "#00ACC1", "#E57373"
 ]
 
 def parse_schedule(schedule_str):
