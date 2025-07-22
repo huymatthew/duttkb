@@ -6,8 +6,10 @@ import os
 
 # Define colors for courses
 COLORS = [
-    "#FFB6C1", "#87CEEB", "#98FB98", "#F0E68C", "#DDA0DD",
-    "#FFA07A", "#20B2AA", "#87CEFA", "#FFEFD5", "#D3D3D3"
+    "#FFEBEE", "#E3F2FD", "#E8F5E9", "#FFFDE7", "#F3E5F5",
+    "#FFF3E0", "#E0F7FA", "#F1F8E9", "#FBE9E7", "#F5F5F5",
+    "#FFF9C4", "#E0F2F1", "#F8BBD0", "#FFECB3", "#C8E6C9",
+    "#BBDEFB", "#FFE0B2", "#D1C4E9", "#B2EBF2", "#FFCDD2"
 ]
 
 def parse_schedule(schedule_str):
@@ -154,19 +156,21 @@ def generator(json_data):
         data = parse_json_data(json_data)
     else:
         data = json_data
-    
-    def add_course(course):
+    _color = random.shuffle(COLORS)
+
+    def add_course(course, color):
         text = course['course_name'] + '\n - ' + str(course['schedule'][3])
         cpos = (position[0] + (course['schedule'][0] - 2) * 64 * 6, position[1] + (course['schedule'][1] - 1) * 128)
         rect_x0 = cpos[0]
         rect_y0 = cpos[1]
         rect_x1 = cpos[0] + 384
         rect_y1 = cpos[1] + (course['schedule'][2] - course['schedule'][1] + 1) * 128
-        draw.rectangle([rect_x0, rect_y0, rect_x1, rect_y1], outline="black", fill=random.choice(COLORS), width=4)
+        draw.rectangle([rect_x0, rect_y0, rect_x1, rect_y1], outline="black", fill=color, width=4)
         draw_text_with_max_width(draw, text, cpos, font, max_width, fill=(0, 0, 0))
     
+
     for course in data.values():
-        add_course(course)
+        add_course(course, _color.pop())
     return image
 
 if __name__ == '__main__':
